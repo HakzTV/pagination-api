@@ -29,7 +29,7 @@ const users = [
     {id: 18 , name: 'User 18'},
     {id: 19, name: 'User 19'},
 ]
-const post = [
+const posts = [
     {id: 1 , name: 'Post 1'},
     {id: 2 , name: 'Post 2'},
     {id: 3 , name: 'Post 3'},
@@ -51,37 +51,14 @@ const post = [
     {id: 19, name: 'Post 19'},
 ]
 
-app.get('/post', (req, res)=>{
+app.get('/post', paginatedResults(posts), (req, res)=>{
+    res.json(res.paginatedResults)
     
 })
 
-app.get('/users', paginatedResults(posts), (req,res)=>{
+app.get('/users', paginatedResults(users), (req,res)=>{
     // So it can return numbers instead of a string
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
-
-    const startIndex = (page - 1)* limit
-    
-    const endIndex = page * limit
-
-    const results = {}
-
-    if(endIndex < users.length){
-        results.next = {
-            page: page + 1,
-            limit: limit 
-        }
-    }
-    
-    if(startIndex > 0){
-        results.previous = {
-            page: page - 1,
-            limit: limit 
-        }
-    }
-  
-   results.results = users.slice(startIndex, endIndex)
-    res.json(results)
+    res.json(res.paginatedResults)
 })
 
 // Middleware 
